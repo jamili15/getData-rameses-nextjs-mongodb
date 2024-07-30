@@ -1,47 +1,64 @@
+"use server";
+
 import { openDb } from "@/lib/server/db";
+import { revalidatePath } from "next/cache";
 
 export const getExampleData = async () => {
   try {
     const db = openDb("test2", "todos");
     const groups = await db.getList({});
-    console.log("GROUPS", groups);
     return groups;
   } catch (err) {
-    return { code: "404", error: err };
+    return { error: err };
   }
 };
 
-export const createExampleData = async () => {
+export const createExampleData = async ({
+  name,
+  age,
+}: {
+  name: string;
+  age: number | null;
+}) => {
   try {
     const db = openDb("test2", "todos");
     const groups = await db.insert({
-      id: 3,
-      title: "wassup world",
-      number: 100,
+      name: name,
+      age: age,
     });
+    revalidatePath("/");
     return groups;
   } catch (err) {
     return { error: err };
   }
 };
 
-export const updateExampleData = async () => {
+export const updateExampleData = async ({
+  _id,
+  name,
+  age,
+}: {
+  _id: number | string;
+
+  name: string;
+  age: number | null;
+}) => {
   try {
     const db = openDb("test2", "todos");
-    const groups = await db.update(
-      { id: 1 },
-      { id: 1, title: "wassup world", number: 800 }
-    );
+    const groups = await db.replace({ _id: _id }, { name: name, age: age });
+
+    revalidatePath("/");
     return groups;
   } catch (err) {
     return { error: err };
   }
 };
 
-export const deleteExampleData = async () => {
+export const deleteExampleData = async ({ _id }: { _id: number | string }) => {
   try {
     const db = openDb("test2", "todos");
-    const groups = await db.deleteMany({ id: 3 });
+    const groups = await db.deleteMany({ _id: _id });
+    revalidatePath("/");
     return groups;
   } catch (err) {
     return { error: err };
@@ -50,7 +67,7 @@ export const deleteExampleData = async () => {
 
 // export const getOccupancyTypeGroups = async () => {
 //   const db = openDb("cloud_obo", "occupancytype");
-//   const groups = await db.getList({}, { projection: { id: 1, title: 1 } });
+//   const groups = await db.getList({}, { projection: { id: 1, name: 1 } });
 //   console.log("groups => ", groups);
 //   return groups;
 // };
