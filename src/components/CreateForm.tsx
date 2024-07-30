@@ -53,7 +53,7 @@ const CreateForm = () => {
           <input
             type="number"
             id="age"
-            value={age?.toString()}
+            value={age !== null ? age.toString() : ""}
             onChange={(e) =>
               setAge(
                 e.target.value === "" ? null : parseInt(e.target.value, 10)
