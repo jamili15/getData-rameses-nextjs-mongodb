@@ -1,16 +1,23 @@
 import CreateForm from "@/components/CreateForm";
 import FormList from "@/components/FormList";
+import SearchForm from "@/components/Search";
 import { getExampleData } from "@/services/formService";
 import React from "react";
 
-const page = async () => {
-  const groups = await getExampleData();
+interface HomeProps {
+  params?: { [key: string]: any };
+  searchParams: URLSearchParams;
+}
+
+const page: React.FC<HomeProps> = async ({ params, searchParams }) => {
+  const groups = await getExampleData(searchParams);
 
   console.log("GROUPS", groups);
 
   return (
     <div>
       <FormList lists={groups} />
+      <SearchForm />
       <CreateForm />
     </div>
   );

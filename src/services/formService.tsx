@@ -3,9 +3,21 @@
 import { openDb } from "@/lib/server/db";
 import { revalidatePath } from "next/cache";
 
-export const getExampleData = async () => {
+export const getExampleData = async (queryParams: any) => {
+  const search = queryParams.search || "";
   try {
     const db = openDb("test2", "todos");
+    const query = search ? { name: { $regex: search, $options: "i" } } : {};
+    const groups = await db.getList(query);
+    return groups;
+  } catch (err) {
+    return { error: err };
+  }
+};
+
+export const getFormData = async () => {
+  try {
+    const db = openDb("pageflow", "formdata");
     const groups = await db.getList({});
     return groups;
   } catch (err) {
@@ -25,6 +37,32 @@ export const createExampleData = async ({
     const groups = await db.insert({
       name: name,
       age: age,
+    });
+    revalidatePath("/");
+    return groups;
+  } catch (err) {
+    return { error: err };
+  }
+};
+
+export const createFormData = async ({
+  username,
+  firstname,
+  lastname,
+  mobileno,
+}: {
+  username: string;
+  firstname: string;
+  lastname: string;
+  mobileno: string;
+}) => {
+  try {
+    const db = openDb("pageflow", "formdata");
+    const groups = await db.insert({
+      username: username,
+      firstname: firstname,
+      lastname: lastname,
+      mobileno: mobileno,
     });
     revalidatePath("/");
     return groups;

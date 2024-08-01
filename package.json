@@ -9,12 +9,19 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@emotion/react": "^11.13.0",
+    "@emotion/styled": "^11.13.0",
+    "@mui/material": "^5.16.6",
+    "@mui/x-date-pickers": "^7.11.1",
     "crypto-js": "^4.2.0",
+    "dayjs": "^1.11.12",
+    "final-form": "^4.20.10",
     "mongodb": "^6.8.0",
     "mongoose": "^8.5.1",
     "next": "14.2.5",
     "react": "^18",
     "react-dom": "^18",
+    "react-final-form": "^6.5.9",
     "socket.io-client": "^4.7.5",
     "uuid": "^10.0.0"
   },
