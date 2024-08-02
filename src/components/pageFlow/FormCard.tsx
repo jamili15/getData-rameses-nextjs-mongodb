@@ -6,7 +6,7 @@ interface FormCardProps {
 
 const FormCard: React.FC<FormCardProps> = ({ data }) => {
   return (
-    <div className="flex flex-col gap-5">
+    <div className="flex gap-5">
       <h1>{data.username}</h1>
       <h1>{data.firstname}</h1>
       <h1>{data.lastname}</h1>

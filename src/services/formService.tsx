@@ -45,25 +45,10 @@ export const createExampleData = async ({
   }
 };
 
-export const createFormData = async ({
-  username,
-  firstname,
-  lastname,
-  mobileno,
-}: {
-  username: string;
-  firstname: string;
-  lastname: string;
-  mobileno: string;
-}) => {
+export const createFormData = async (formData: Record<string, any>) => {
   try {
     const db = openDb("pageflow", "formdata");
-    const groups = await db.insert({
-      username: username,
-      firstname: firstname,
-      lastname: lastname,
-      mobileno: mobileno,
-    });
+    const groups = await db.insert(formData);
     revalidatePath("/");
     return groups;
   } catch (err) {

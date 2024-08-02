@@ -7,12 +7,16 @@ import { createFormData } from "@/services/formService";
 
 const Credentials = (props: any) => {
   const handleSubmit = async () => {
+    const username = props.formValues.username;
+    const firstname = props.formValues.firstname;
+    const lastname = props.formValues.lastname;
+    const mobileno = props.formValues.mobileno;
     props.onSubmit();
     await createFormData({
-      username: props.formValues.username,
-      firstname: props.formValues.firstname,
-      lastname: props.formValues.lastname,
-      mobileno: props.formValues.mobileno,
+      username,
+      firstname,
+      lastname,
+      mobileno,
     });
   };
   console.log("Credentials", props);
