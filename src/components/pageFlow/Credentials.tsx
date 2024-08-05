@@ -19,6 +19,13 @@ const Credentials = (props: any) => {
       mobileno,
     });
   };
+
+  const handleSubmitPageFlow = async () => {
+    const data = props.formValues;
+    props.onSubmit();
+    await createFormData(data);
+  };
+
   console.log("Credentials", props);
   return (
     <div>
@@ -36,7 +43,7 @@ const Credentials = (props: any) => {
       <Button
         type="submit"
         onClick={() => {
-          handleSubmit();
+          handleSubmitPageFlow();
         }}
       >
         Submit
