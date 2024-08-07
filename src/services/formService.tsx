@@ -10,8 +10,10 @@ export const getExampleData = async (queryParams: any) => {
     const query = search ? { name: { $regex: search, $options: "i" } } : {};
     const groups = await db.getList(query);
     return groups;
-  } catch (err) {
-    return { error: err };
+  } catch (err: unknown) {
+    const message =
+      err instanceof Error ? err.message : "An unknown error occurred";
+    return { error: message };
   }
 };
 
@@ -19,9 +21,14 @@ export const getFormData = async () => {
   try {
     const db = openDb("pageflow", "formdata");
     const groups = await db.getList({});
+    const groupsPlainObj = groups.map((group: any) => ({
+      ...group,
+    }));
     return groups;
-  } catch (err) {
-    return { error: err };
+  } catch (err: unknown) {
+    const message =
+      err instanceof Error ? err.message : "An unknown error occurred";
+    return { error: message };
   }
 };
 
@@ -40,8 +47,10 @@ export const createExampleData = async ({
     });
     revalidatePath("/");
     return groups;
-  } catch (err) {
-    return { error: err };
+  } catch (err: unknown) {
+    const message =
+      err instanceof Error ? err.message : "An unknown error occurred";
+    return { error: message };
   }
 };
 
@@ -51,8 +60,10 @@ export const createFormData = async (formData: Record<string, any>) => {
     const groups = await db.insert(formData);
     revalidatePath("/");
     return groups;
-  } catch (err) {
-    return { error: err };
+  } catch (err: unknown) {
+    const message =
+      err instanceof Error ? err.message : "An unknown error occurred";
+    return { error: message };
   }
 };
 
@@ -72,8 +83,10 @@ export const updateExampleData = async ({
 
     revalidatePath("/");
     return groups;
-  } catch (err) {
-    return { error: err };
+  } catch (err: unknown) {
+    const message =
+      err instanceof Error ? err.message : "An unknown error occurred";
+    return { error: message };
   }
 };
 
@@ -83,8 +96,10 @@ export const deleteExampleData = async ({ _id }: { _id: number | string }) => {
     const groups = await db.deleteMany({ _id: _id });
     revalidatePath("/");
     return groups;
-  } catch (err) {
-    return { error: err };
+  } catch (err: unknown) {
+    const message =
+      err instanceof Error ? err.message : "An unknown error occurred";
+    return { error: message };
   }
 };
 
