@@ -5,7 +5,7 @@ import { deleteExampleData } from "@/services/formService";
 import { useMyContext } from "@/context/Provider";
 
 interface CardProps {
-  list: any;
+  list: Record<string, any>;
 }
 
 const FormCard: React.FC<CardProps> = ({ list }) => {
