@@ -2,6 +2,7 @@ import CreateForm from "@/components/CreateForm";
 import FormList from "@/components/FormList";
 import SearchForm from "@/components/Search";
 import { getExampleData } from "@/services/formService";
+import FormData from "@/components/FormData";
 import React from "react";
 
 interface HomeProps {
@@ -18,7 +19,8 @@ const page: React.FC<HomeProps> = async ({ params, searchParams }) => {
     <div>
       <FormList lists={groups} />
       <SearchForm />
-      <CreateForm />
+      {/* <CreateForm /> */}
+      <FormData />
     </div>
   );
 };
