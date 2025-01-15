@@ -1,5 +1,5 @@
 import { MongoClient } from "mongodb";
-import { oid, isArray } from "../helpers";
+import { isArray, oid } from "../helpers";
 
 let connected = false;
 let client: MongoClient;
@@ -38,7 +38,10 @@ const generateIds = (docs: any) => {
   });
 };
 
-const insert = async (data: any, options = { reload: false }) => {
+const insert = async (
+  data: Record<string, any> | Record<string, any>[],
+  options = { reload: false },
+) => {
   if (isArray(data)) {
     return await insertMany(data, options);
   } else {
@@ -46,7 +49,10 @@ const insert = async (data: any, options = { reload: false }) => {
   }
 };
 
-const insertOne = async (data: any, options = { reload: false }) => {
+const insertOne = async (
+  data: Record<string, any>,
+  options = { reload: false },
+) => {
   try {
     if (!data._id) data._id = oid();
     const retval = await collection.insertOne(data);
@@ -58,7 +64,7 @@ const insertOne = async (data: any, options = { reload: false }) => {
       return data;
     }
     throw Error(
-      "An error was encountered saving to database. Please try again."
+      "An error was encountered saving to database. Please try again.",
     );
   } catch (err) {
     console.log("insertOne [ERROR]", err);
@@ -66,7 +72,10 @@ const insertOne = async (data: any, options = { reload: false }) => {
   }
 };
 
-const insertMany = async (data = [], options = { reload: false }) => {
+const insertMany = async (
+  data: Record<string, any>[],
+  options = { reload: false },
+) => {
   try {
     generateIds(data);
     const retval = await collection.insertMany(data);
@@ -78,7 +87,7 @@ const insertMany = async (data = [], options = { reload: false }) => {
       return data;
     }
     throw Error(
-      "An error was encountered saving the record. Please try again."
+      "An error was encountered saving the record. Please try again.",
     );
   } catch (err) {
     console.log("insertMany [ERROR]", err);
@@ -94,13 +103,13 @@ const update = async (filter = {}, data = {}, options = {}) => {
         $set: data,
         $currentDate: { lastModified: true },
       },
-      options
+      options,
     );
     if (retval.acknowledged) {
       return retval;
     }
     throw Error(
-      "An error was encountered updating the record. Please try again."
+      "An error was encountered updating the record. Please try again.",
     );
   } catch (err) {
     console.log("update [ERROR]", err);
@@ -116,13 +125,13 @@ const updateMany = async (filter = {}, data = {}, options = {}) => {
         $set: data,
         $currentDate: { lastModified: true },
       },
-      options
+      options,
     );
     if (retval.acknowledged) {
       return retval;
     }
     throw Error(
-      "An error was encountered updating the record. Please try again."
+      "An error was encountered updating the record. Please try again.",
     );
   } catch (err) {
     console.log("updateMany [ERROR]", err);
@@ -137,7 +146,7 @@ const replace = async (filter = {}, data = {}, options = {}) => {
       return retval;
     }
     throw Error(
-      "An error was encountered replacing the record. Please try again."
+      "An error was encountered replacing the record. Please try again.",
     );
   } catch (err) {
     console.log("replace [ERROR]", err);
@@ -152,10 +161,32 @@ const deleteMany = async (filter = {}, options = {}) => {
       return retval;
     }
     throw Error(
-      "An error was encountered replacing the record. Please try again."
+      "An error was encountered replacing the record. Please try again.",
     );
   } catch (err) {
     console.log("deleteMany [ERROR]", err);
+    throw err;
+  }
+};
+
+const deleteOne = async (filter = {}, data = {}, options = {}) => {
+  try {
+    const retval = await collection.updateOne(
+      filter,
+      {
+        $unset: data,
+        $currentDate: { lastModified: true },
+      },
+      options,
+    );
+    if (retval.acknowledged) {
+      return retval;
+    }
+    throw Error(
+      "An error was encountered updating the record. Please try again.",
+    );
+  } catch (err) {
+    console.log("update [ERROR]", err);
     throw err;
   }
 };
@@ -198,6 +229,7 @@ export const openDb = (dbName: string, collectionName: string) => {
     updateMany,
     replace,
     deleteMany,
+    deleteOne,
     find,
     getList,
     closeChangeStream,
